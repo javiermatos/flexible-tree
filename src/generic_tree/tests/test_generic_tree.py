@@ -8,7 +8,9 @@ from .. import GenericTreeKey
 class TestGenericTree(unittest.TestCase):
 
     def setUp(self):
-        self.gt = GenericTree(GenericTreeKey(''))
+        self.k0 = GenericTreeKey('')
+        self.v0 = None
+        self.gt = GenericTree(self.k0, self.v0)
 
     def test_add_get(self):
         k1 = GenericTreeKey('1')
@@ -35,6 +37,24 @@ class TestGenericTree(unittest.TestCase):
         generic_tree = GenericTree(k1, v1)
         with self.assertRaises(GenericTreeError):
             generic_tree.add(k2, v2)
+
+    def test_add_get_closest(self):
+        k1 = GenericTreeKey('1')
+        v1 = 1
+        k12 = GenericTreeKey('12')
+        v12 = 12
+        k123 = GenericTreeKey('123')
+        v123 = 123
+        k2 = GenericTreeKey('2')
+        v2 = 2
+
+        self.gt.add(k1, v1)
+        self.gt.add(k123, v123)
+
+        self.assertSequenceEqual(self.gt.get_closest(k1), (v1, k1))
+        self.assertSequenceEqual(self.gt.get_closest(k12), (v1, k1))
+        self.assertSequenceEqual(self.gt.get_closest(k12, v12), (v1, k1))
+        self.assertSequenceEqual(self.gt.get_closest(k2), (self.v0, self.k0))
 
     def test_add_count_count_all_depth(self):
         k1 = GenericTreeKey('1')
