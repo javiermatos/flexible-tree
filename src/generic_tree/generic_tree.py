@@ -6,7 +6,8 @@ class GenericTree(object):
 
     def __init__(self, key, value=None):
         if not isinstance(key, GenericTreeKey):
-            raise ValueError('First argument key must be a {}'.format(str(GenericTreeKey)))
+            raise GenericTreeError('First argument key must be a {}'.format(str(GenericTreeKey)))
+
         self.key = key
         self.value = value
         self.children = {}
